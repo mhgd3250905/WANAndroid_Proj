@@ -1,2 +1,8 @@
-# WANAndroid_Proj
-WANAndroid Flutter 客户端
+# douban_movies
+
+A new Flutter application.
+
+## Getting Started
+
+For help getting started with Flutter, view our online
+[documentation](https://flutter.io/).
