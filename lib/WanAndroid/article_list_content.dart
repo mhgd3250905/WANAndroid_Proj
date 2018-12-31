@@ -14,7 +14,7 @@ class ArticleListPage extends StatefulWidget {
   final int id;
   ScrollController scrollController = new ScrollController();
   GlobalKey<RefreshIndicatorState> _refreshIndicaterState =
-  GlobalKey<RefreshIndicatorState>();
+      GlobalKey<RefreshIndicatorState>();
 
   ArticleListPage({this.type, this.id});
 
@@ -68,15 +68,15 @@ class _ArticleListPageState extends State<ArticleListPage> {
     return widget.mDataList.length == 0
         ? buildFutureBuilder()
         : RefreshIndicator(
-      key: widget._refreshIndicaterState,
-      child: getListView(
-          widget.mDataList, widget.type, widget.scrollController),
-      onRefresh: resetData,
-    );
+            key: widget._refreshIndicaterState,
+            child: getListView(
+                widget.mDataList, widget.type, widget.scrollController),
+            onRefresh: resetData,
+          );
   }
 
-  getListView(List<Data> datas, ArticleType type,
-      ScrollController scrollContriller) {
+  getListView(
+      List<Data> datas, ArticleType type, ScrollController scrollContriller) {
     return new ArticleListView(datas, type, scrollContriller);
   }
 
@@ -158,23 +158,24 @@ class ArticleListView extends StatelessWidget {
       itemCount: datas.length,
       itemBuilder: (BuildContext context, int i) {
         return new Container(
-          margin: EdgeInsets.only(top: i == 0 ? 10.0 : 0.0),
           child: Column(
             children: <Widget>[
               InkWell(
-                child: getContentItem(i),
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border(bottom: BorderSide(color: Colors.grey,width: 0.3)),
+                  ),
+                  margin: const EdgeInsets.only(top: 10.0),
+                  child: getContentItem(i),
+                ),
                 onTap: () {
                   NavigatorRouterUtils.pushToPage(
-                    context, ArticleDetailPage(
-                    data: datas[i],
-                  ),
+                    context,
+                    ArticleDetailPage(
+                      data: datas[i],
+                    ),
                   );
                 },
-              ),
-              new Container(
-                margin: EdgeInsets.only(bottom: 10.0),
-                color: Colors.grey,
-                height: 0.2,
               ),
             ],
           ),
@@ -287,17 +288,17 @@ class _ArticleItemViewState extends State<ArticleItemView> {
               ),
               new Expanded(
                   child: new Container(
-                    alignment: Alignment.centerRight,
-                    child: IconButton(
-                        icon: new Icon(
-                          isCollected ? Icons.favorite : Icons.favorite_border,
-                          color: isCollected ? Colors.blue : Colors.grey[400],
-                          size: 20.0,
-                        ),
-                        onPressed: () {
-                          changeItemCollect();
-                        }),
-                  )),
+                alignment: Alignment.centerRight,
+                child: IconButton(
+                    icon: new Icon(
+                      isCollected ? Icons.favorite : Icons.favorite_border,
+                      color: isCollected ? Colors.blue : Colors.grey[400],
+                      size: 20.0,
+                    ),
+                    onPressed: () {
+                      changeItemCollect();
+                    }),
+              )),
             ],
           ),
         ],
@@ -404,20 +405,19 @@ class _ProjectItemViewState extends State<ProjectItemView> {
                     ),
                     new Expanded(
                         child: new Container(
-                          alignment: Alignment.centerRight,
-                          child: IconButton(
-                              icon: new Icon(
-                                isCollected
-                                    ? Icons.favorite
-                                    : Icons.favorite_border,
-                                color: isCollected ? Colors.blue : Colors
-                                    .grey[400],
-                                size: 20.0,
-                              ),
-                              onPressed: () {
-                                changeItemCollect();
-                              }),
-                        )),
+                      alignment: Alignment.centerRight,
+                      child: IconButton(
+                          icon: new Icon(
+                            isCollected
+                                ? Icons.favorite
+                                : Icons.favorite_border,
+                            color: isCollected ? Colors.blue : Colors.grey[400],
+                            size: 20.0,
+                          ),
+                          onPressed: () {
+                            changeItemCollect();
+                          }),
+                    )),
                   ],
                 ),
               ],
