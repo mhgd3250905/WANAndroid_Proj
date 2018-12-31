@@ -40,6 +40,7 @@ class Node {
   bool userControlSetTop;
   int visible;
   List<Node> childNodes;
+  
 
   Node.fromParams(
       {this.courseId, this.mId, this.name, this.order, this.parentChapterId,

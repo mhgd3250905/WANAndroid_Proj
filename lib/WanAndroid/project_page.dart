@@ -3,8 +3,14 @@ import 'package:douban_movies/WanAndroid/Data/data_tree_bean.dart';
 import 'package:douban_movies/WanAndroid/article_page.dart';
 import 'package:douban_movies/WanAndroid/navigator_router_utils.dart';
 import 'package:flutter/material.dart';
+import 'dart:math';
 
 final String URL_TREE_LIST = 'http://www.wanandroid.com/project/tree/json';
+
+getRandomColor() {
+  return Color.fromARGB(255, Random.secure().nextInt(255),
+      Random.secure().nextInt(255), Random.secure().nextInt(255));
+}
 
 class ProjectTreePage extends StatefulWidget {
   @override
@@ -71,12 +77,76 @@ class ContentView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return ListView.builder(
-      itemBuilder: (context, i) {
-        return new ContentItemView(nodes[i]);
-      },
-      itemCount: nodes.length,
-      scrollDirection: Axis.vertical,
+//    return ListView.builder(
+//      itemBuilder: (context, i) {
+//        return new ContentItemView(nodes[i]);
+//      },
+//      itemCount: nodes.length,
+//      scrollDirection: Axis.vertical,
+//    );
+    return GridView.count(
+      crossAxisCount: 2,
+      padding: const EdgeInsets.all(10.0),
+      children: nodes.map((node) {
+        return ProjectItemView(
+          node: node,
+        );
+      }).toList(),
+    );
+  }
+}
+
+class ProjectItemView extends StatelessWidget {
+  final Node node;
+
+  ProjectItemView({this.node});
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return Card(
+      color: getRandomColor(),
+      shape: new RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(5.0),
+          topRight: Radius.circular(5.0),
+          bottomLeft: Radius.circular(5.0),
+          bottomRight: Radius.circular(5.0),
+        ),
+      ),
+      elevation: 2.5,
+      child: InkWell(
+        onTap: () {
+          NavigatorRouterUtils.pushToPage(
+              context,
+              new ArticlePage(
+                name: node.name,
+                id: node.mId,
+                type: ArticleType.PROJECT_ARTICLE,
+              ));
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5.0),
+          ),
+          alignment: Alignment.center,
+          child: Container(
+            margin: const EdgeInsets.only(left: 10.0, right: 10.0),
+            child: Text(
+              node.name,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 20.0,
+                color: Colors.white,
+                shadows: [
+                  BoxShadow(color: Colors.grey, offset: Offset(0.5, 0.5)),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

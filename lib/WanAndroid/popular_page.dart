@@ -166,6 +166,7 @@ class ContentRightListView extends StatelessWidget {
     // TODO: implement build
     return Container(
       margin: EdgeInsets.only(
+        left: 10.0,
         top: 10.0,
       ),
       alignment: Alignment.topLeft,
