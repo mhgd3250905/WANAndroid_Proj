@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:dio/dio.dart';
 import 'package:douban_movies/WanAndroid/Data/data_tree_bean.dart';
@@ -131,7 +132,8 @@ class ContentItemView extends StatelessWidget {
                         style: TextStyle(
                           color: Colors.white,
                           shadows: [
-                            Shadow(color: Colors.grey, offset: Offset(0.2, 0.2))
+                            BoxShadow(
+                                color: Colors.grey, offset: Offset(0.2, 0.2))
                           ],
                         ),
                       ),
