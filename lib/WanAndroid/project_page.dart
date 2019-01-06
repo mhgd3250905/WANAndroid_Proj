@@ -120,7 +120,7 @@ class ProjectItemView extends StatelessWidget {
           NavigatorRouterUtils.pushToPage(
               context,
               new ArticlePage(
-                name: node.name,
+                name: node.getName(),
                 id: node.mId,
                 type: ArticleType.PROJECT_ARTICLE,
               ));
@@ -133,7 +133,7 @@ class ProjectItemView extends StatelessWidget {
           child: Container(
             margin: const EdgeInsets.only(left: 10.0, right: 10.0),
             child: Text(
-              node.name,
+              node.getName(),
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
@@ -166,7 +166,7 @@ class ContentItemView extends StatelessWidget {
           NavigatorRouterUtils.pushToPage(
               context,
               new ArticlePage(
-                name: node.name,
+                name: node.getName(),
                 id: node.mId,
                 type: ArticleType.PROJECT_ARTICLE,
               ));
@@ -178,7 +178,7 @@ class ContentItemView extends StatelessWidget {
               Container(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  node.name,
+                  node.getName(),
                   style: TextStyle(
                     fontSize: 18.0,
                     fontWeight: FontWeight.bold,

@@ -107,7 +107,7 @@ class ContentItemView extends StatelessWidget {
           Container(
             alignment: Alignment.centerLeft,
             child: Text(
-              node.name,
+              node.getName(),
               style: TextStyle(
                 fontSize: 18.0,
                 fontWeight: FontWeight.bold,
@@ -128,7 +128,7 @@ class ContentItemView extends StatelessWidget {
                     child: Container(
                       padding: EdgeInsets.all(3.0),
                       child: Text(
-                        childNode.name,
+                        childNode.getName(),
                         style: TextStyle(
                           color: Colors.white,
                           shadows: [
@@ -145,7 +145,7 @@ class ContentItemView extends StatelessWidget {
                     NavigatorRouterUtils.pushToPage(
                         context,
                         new ArticlePage(
-                          name: childNode.name,
+                          name: childNode.getName(),
                           id: childNode.mId,
                           type: ArticleType.NORMAL_ARTICLE,
                         ));

@@ -22,7 +22,7 @@ class DetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-        title: new Text(subjectItem.title),
+        title: new Text(subjectItem.getTitle()),
       ),
       body: new DetailContent(subjectItem.id),
     );

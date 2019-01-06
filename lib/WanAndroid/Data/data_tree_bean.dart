@@ -1,4 +1,5 @@
 import 'dart:convert' show json;
+import 'package:html_unescape/html_unescape.dart';
 
 class TreeBean {
   int errorCode;
@@ -40,7 +41,12 @@ class Node {
   bool userControlSetTop;
   int visible;
   List<Node> childNodes;
-  
+
+  getName(){
+    var unescape = new HtmlUnescape();
+    return unescape.convert(name);
+  }
+
 
   Node.fromParams(
       {this.courseId, this.mId, this.name, this.order, this.parentChapterId,

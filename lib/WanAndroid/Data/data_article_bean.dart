@@ -1,5 +1,7 @@
 import 'dart:convert' show json;
 
+import 'package:html_unescape/html_unescape.dart';
+
 class HomeBean {
   int errorCode;
   String errorMsg;
@@ -101,6 +103,11 @@ class Data {
   int userId;
   int visible;
   int zan;
+
+  getTitle(){
+    var unescape = new HtmlUnescape();
+    return unescape.convert(title);
+  }
 
   Data.fromParams({
     this.apkLink,

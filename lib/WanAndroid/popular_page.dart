@@ -138,7 +138,7 @@ class ContentLeftListView extends StatelessWidget {
               border: Border.all(color: checkedIndex==i?Colors.blue:Colors.white,width: 1.0),
             ),
             child: Text(
-              nodes[i].name,
+              nodes[i].getName(),
               style: TextStyle(
                 fontSize: 15.0,
                 color: Colors.black,
@@ -179,7 +179,7 @@ class ContentRightListView extends StatelessWidget {
               child: Container(
                 padding: EdgeInsets.all(3.0),
                 child: Text(
-                  childNode.title,
+                  childNode.getTitle(),
                   style: TextStyle(
                     color: Colors.white,
                     shadows: [
@@ -248,7 +248,7 @@ class ContentItemView extends StatelessWidget {
             Container(
               alignment: Alignment.centerLeft,
               child: Text(
-                naviNode.name,
+                naviNode.getName(),
                 style: TextStyle(
                   fontSize: 18.0,
                   fontWeight: FontWeight.bold,
@@ -269,7 +269,7 @@ class ContentItemView extends StatelessWidget {
                       child: Container(
                         padding: EdgeInsets.all(3.0),
                         child: Text(
-                          childNode.title,
+                          childNode.getTitle(),
                           style: TextStyle(
                             color: Colors.white,
                             shadows: [

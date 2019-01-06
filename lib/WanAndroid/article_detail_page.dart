@@ -13,7 +13,7 @@ class ArticleDetailPage extends StatelessWidget {
     return new WebviewScaffold(
         url: data.link,
         appBar: new AppBar(
-          title:Text(data.title),
+          title:Text(data.getTitle()),
         ),
         withZoom: true,
         withLocalStorage: true,

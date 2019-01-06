@@ -327,7 +327,7 @@ class SearchDefaultItemView extends StatelessWidget {
                     child: Container(
                       padding: EdgeInsets.all(3.0),
                       child: Text(
-                        childNode.name,
+                        childNode.getName(),
                         style: TextStyle(
                           color: Colors.white,
                         ),
@@ -337,8 +337,8 @@ class SearchDefaultItemView extends StatelessWidget {
                     borderRadius: new BorderRadius.circular(3.0),
                   ),
                   onTap: () {
-                    debugPrint('onTap key-> ${childNode.name}');
-                    _keyStr = childNode.name;
+                    debugPrint('onTap key-> ${childNode.getName()}');
+                    _keyStr = childNode.getName();
                     callback();
                   },
                 );

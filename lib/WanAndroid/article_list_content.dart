@@ -263,7 +263,7 @@ class _ArticleItemViewState extends State<ArticleItemView> {
             width: double.infinity,
             alignment: Alignment.centerLeft,
             child: Text(
-              widget.data.title,
+              widget.data.getTitle(),
               style: TextStyle(
                 fontSize: 18.0,
               ),
@@ -362,7 +362,7 @@ class _ProjectItemViewState extends State<ProjectItemView> {
                     child: Column(
                       children: <Widget>[
                         Text(
-                          widget.data.title,
+                          widget.data.getTitle(),
                           style: TextStyle(
                             fontSize: 15.0,
                           ),
@@ -373,7 +373,7 @@ class _ProjectItemViewState extends State<ProjectItemView> {
                           alignment: Alignment.topLeft,
                           width: double.infinity,
                           child: Text(
-                            widget.data.title,
+                            widget.data.getTitle(),
                             style: TextStyle(
                               fontSize: 13.0,
                               color: Colors.grey,

@@ -1,5 +1,7 @@
 import 'dart:convert' show json;
 
+import 'package:html_unescape/html_unescape.dart';
+
 class KeyBean {
   int errorCode;
   String errorMsg;
@@ -40,6 +42,11 @@ class KeyNode {
   String name;
   int order;
   int visible;
+
+  getName(){
+    var unescape = new HtmlUnescape();
+    return unescape.convert(name);
+  }
 
   KeyNode.fromParams(
       {this.mid, this.link, this.name, this.order, this.visible});

@@ -1,6 +1,7 @@
 import 'dart:convert' show json;
 
 import 'package:douban_movies/WanAndroid/Data/data_article_bean.dart';
+import 'package:html_unescape/html_unescape.dart';
 
 class NaviBean {
   int errorCode;
@@ -40,6 +41,11 @@ class NaviNode {
   int cid;
   String name;
   List<Data> articles;
+
+  getName(){
+    var unescape = new HtmlUnescape();
+    return unescape.convert(name);
+  }
 
   NaviNode.fromParams({this.cid, this.name, this.articles});
 
