@@ -2,11 +2,15 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:douban_movies/WanAndroid/Data/data_navi_bean.dart';
+import 'package:douban_movies/WanAndroid/Data/data_person_bean.dart';
 import 'package:douban_movies/WanAndroid/dialog_utils.dart';
 import 'package:douban_movies/WanAndroid/icon_font_utils.dart';
+import 'package:douban_movies/WanAndroid/sp_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:douban_movies/WanAndroid/config.dart';
 import 'package:cookie_jar/cookie_jar.dart';
+
+String account;
 
 class PersonPage extends StatefulWidget {
   @override
@@ -47,19 +51,6 @@ class _PersonPageState extends State<PersonPage> {
       );
     }
 
-    Widget accountItemView = Container(
-      decoration: BoxDecoration(
-          color: Colors.yellow,
-          border: Border(bottom: BorderSide(color: Colors.grey, width: 0.2))),
-      height: 200.0,
-      alignment: const FractionalOffset(0.5, 0.5),
-      child: Stack(
-        children: <Widget>[
-          getAccountWidget('未登录', IconFontUtils.getIcon(0xe611)),
-        ],
-      ),
-    );
-
     Widget favoriteItemView = getMenuItem(
         CircleAvatar(
           child: Icon(Icons.favorite),
@@ -74,17 +65,26 @@ class _PersonPageState extends State<PersonPage> {
 
     return ListView(
       children: <Widget>[
-        accountItemView,
+        AccountWidget(),
         favoriteItemView,
         historyItemView,
       ],
     );
   }
+}
 
-  /**
-   * 获取用户头像需要显示的icon标识以及用户名的Widget
-   */
+//账户widget
+class AccountWidget extends StatefulWidget {
+  @override
+  _AccountWidgetState createState() => new _AccountWidgetState();
+}
+
+class _AccountWidgetState extends State<AccountWidget> {
+  //获取用户头像需要显示的icon标识以及用户名的Widget
   getAccountWidget(String userName, Icon icon) {
+    if (userName == null) {
+      userName = "未登录";
+    }
     return Container(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -97,10 +97,10 @@ class _PersonPageState extends State<PersonPage> {
                   barrierDismissible: true,
                   builder: (BuildContext context) {
                     return new CustomizeDialog(
-                      canceledOnTouchOutSide: true,
+                      canceledOnTouchOutSide: false,
                       width: 300.0,
-                      height: 260.0,
-                      widget: DialogWidget(),
+                      height: 280.0,
+                      widget: DialogLogoutWidget(),
                     );
                   });
             },
@@ -140,14 +140,106 @@ class _PersonPageState extends State<PersonPage> {
       ),
     );
   }
-}
 
-class DialogWidget extends StatefulWidget {
   @override
-  _DialogWidgetState createState() => new _DialogWidgetState();
+  void initState() {
+    getSpResult();
+  }
+
+  getSpResult() async {
+    account = await SpUtils.getString(SpUtils.KEY_ACCOUNT, "");
+    setState(() {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return Container(
+      decoration: BoxDecoration(
+          color: Colors.yellow,
+          border: Border(bottom: BorderSide(color: Colors.grey, width: 0.2))),
+      height: 200.0,
+      alignment: const FractionalOffset(0.5, 0.5),
+      child: Stack(
+        children: <Widget>[
+          getAccountWidget(account, IconFontUtils.getIcon(0xe611)),
+        ],
+      ),
+    );
+  }
 }
 
-class _DialogWidgetState extends State<DialogWidget> {
+class DialogLogoutWidget extends StatelessWidget {
+  final String account;
+
+  DialogLogoutWidget({this.account});
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return Stack(
+      children: <Widget>[
+        Container(
+          alignment: const FractionalOffset(0.95, 0.05),
+          child: GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: Icon(
+              Icons.close,
+              color: Colors.grey,
+            ),
+          ),
+        ),
+        Container(
+          margin: const EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
+          child: new Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                width: 80.0,
+                height: 80.0,
+                margin: const EdgeInsets.only(bottom: 10.0),
+                child: CircleAvatar(
+                  child: Text(
+                    "mhgd3250905".substring(0, 1).toUpperCase(),
+                    style: TextStyle(
+                      fontSize: 30.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(top: 10.0, bottom: 10.0),
+                child: Text(
+                  "mhgd3250905",
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              LogoutButton(
+                onLogout: (){
+
+                },
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class DialogLoginWidget extends StatefulWidget {
+  @override
+  _DialogLoginWidgetState createState() => new _DialogLoginWidgetState();
+}
+
+class _DialogLoginWidgetState extends State<DialogLoginWidget> {
   bool _isLogin = false;
   var accountController = TextEditingController();
   var passwordController = TextEditingController();
@@ -162,91 +254,151 @@ class _DialogWidgetState extends State<DialogWidget> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return Container(
-      margin: const EdgeInsets.only(left: 10.0, right: 10.0),
-      child: new Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Container(
-            alignment: Alignment.centerLeft,
-            margin: EdgeInsets.all(10.0),
-            child: Text(
-              '登录',
-              style: TextStyle(
-                fontSize: 20.0,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
+    return Stack(
+      children: <Widget>[
+        Container(
+          alignment: const FractionalOffset(0.95, 0.05),
+          child: GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: Icon(
+              Icons.close,
+              color: Colors.grey,
             ),
           ),
-          Container(
-            margin: EdgeInsets.all(5.0),
-            child: TextField(
-              controller: accountController,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: '请输入账号',
-                prefixIcon: IconFontUtils.getIcon(0xe678),
-              ),
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.all(5.0),
-            child: TextField(
-              controller: passwordController,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: '请输入密码',
-                prefixIcon: IconFontUtils.getIcon(0xe609),
-              ),
-            ),
-          ),
-          Container(
-            margin: const EdgeInsets.only(top: 10.0, left: 5.0, right: 5.0),
-            height: 40.0,
-            width: double.infinity,
-            child: RaisedButton(
-              color: Colors.blue,
-              elevation: 0.0,
-              onPressed: () {
-              },
-              child: Text(
-                '登录',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 15.0,
+        ),
+        Container(
+          margin: const EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
+          child: new Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                alignment: Alignment.centerLeft,
+                margin: EdgeInsets.all(10.0),
+                child: Text(
+                  '登录',
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
                 ),
               ),
-            ),
+              Container(
+                margin: EdgeInsets.all(5.0),
+                child: TextField(
+                  controller: accountController,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: '请输入账号',
+                    prefixIcon: IconFontUtils.getIcon(0xe678),
+                  ),
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.all(5.0),
+                child: TextField(
+                  controller: passwordController,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: '请输入密码',
+                    prefixIcon: IconFontUtils.getIcon(0xe609),
+                  ),
+                ),
+              ),
+              LoginButton(
+                account: accountController.text,
+                password: passwordController.text,
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
+}
 
-  FutureBuilder<NaviBean> buildFutureBuilder() {
-    return new FutureBuilder<NaviBean>(
-      builder: (context, AsyncSnapshot<NaviBean> async) {
+class LoginButton extends StatefulWidget {
+  final String account;
+  final String password;
+
+  LoginButton({this.account, this.password});
+
+  @override
+  _LoginButtonState createState() => new _LoginButtonState();
+}
+
+class _LoginButtonState extends State<LoginButton> {
+  bool isSendRequest = false;
+
+  FutureBuilder<PersonBean> buildFutureBuilder() {
+    return new FutureBuilder<PersonBean>(
+      builder: (context, AsyncSnapshot<PersonBean> async) {
         if (async.connectionState == ConnectionState.active ||
             async.connectionState == ConnectionState.waiting) {
-          return new Center(
-            child: new Text('Waitiing...'),
+          return getDefaultButton(
+            false,
+            Text(
+              '登录中...',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 17.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           );
         }
 
         if (async.connectionState == ConnectionState.done) {
           debugPrint('done');
           if (async.hasError) {
-            return new Center(
-              child: new Text('Error:code '),
+            isSendRequest = false;
+            return getDefaultButton(
+              true,
+              Text(
+                '登录失败',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 17.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             );
           } else if (async.hasData) {
-            NaviBean bean = async.data;
-            return RefreshIndicator(
-              child: new ContentView(bean.nodes),
-              onRefresh: () {},
-            );
+            isSendRequest = false;
+            PersonBean bean = async.data;
+            if (bean.errorCode != 0) {
+              return getDefaultButton(
+                true,
+                Text(
+                  '登录失败',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 17.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              );
+            } else {
+              isSendRequest = false;
+              new Future.delayed(const Duration(seconds: 1), () {
+                Navigator.pop(context);
+              });
+              SpUtils.save(SpUtils.KEY_ACCOUNT, bean.data.username);
+              return getDefaultButton(
+                true,
+                Text(
+                  '登录成功',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 17.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              );
+            }
           }
         }
       },
@@ -254,7 +406,7 @@ class _DialogWidgetState extends State<DialogWidget> {
     );
   }
 
-  Future<NaviBean> getData() async {
+  Future<PersonBean> getData() async {
     debugPrint('getData');
     var dio = new Dio();
     Response response = await dio.post(
@@ -264,12 +416,102 @@ class _DialogWidgetState extends State<DialogWidget> {
             charset: 'utf-8'),
       ),
       data: {
-        'username': 'mhgd3250901',
-        'password': '3250905',
+        'username': widget.account,
+        'password': widget.password,
       },
     );
-    NaviBean bean = NaviBean.fromJson(response.data);
+    PersonBean bean = PersonBean.fromJson(response.data);
     return bean;
+  }
+
+  getDefaultButton(bool pressable, Widget innerWidget) {
+    return Container(
+      margin: const EdgeInsets.only(top: 10.0, left: 5.0, right: 5.0),
+      height: 50.0,
+      width: double.infinity,
+      child: GestureDetector(
+        onTap: pressable
+            ? () {
+                isSendRequest = true;
+                setState(() {});
+              }
+            : () {},
+        child: Container(
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: Colors.blue,
+            borderRadius: BorderRadius.circular(4.0),
+          ),
+          child: innerWidget,
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return isSendRequest
+        ? buildFutureBuilder()
+        : getDefaultButton(
+            true,
+            Text(
+              '点击登录',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 17.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          );
+  }
+}
+
+class LogoutButton extends StatefulWidget {
+  final onLogout;
+
+  LogoutButton({this.onLogout});
+
+  @override
+  _LogoutButtonState createState() => new _LogoutButtonState();
+}
+
+class _LogoutButtonState extends State<LogoutButton> {
+  getDefaultButton(Widget innerWidget) {
+    return Container(
+      margin: const EdgeInsets.only(top: 10.0, left: 5.0, right: 5.0),
+      height: 50.0,
+      width: double.infinity,
+      child: GestureDetector(
+        onTap: () {
+          SpUtils.remove(SpUtils.KEY_ACCOUNT);
+          Navigator.pop(context);
+        },
+        child: Container(
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: Colors.blue,
+            borderRadius: BorderRadius.circular(4.0),
+          ),
+          child: innerWidget,
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return getDefaultButton(
+      Text(
+        '点击注销',
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 17.0,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
   }
 }
 

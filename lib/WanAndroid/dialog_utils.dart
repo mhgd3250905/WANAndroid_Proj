@@ -23,7 +23,7 @@ class CustomizeDialog extends Dialog {
       child: GestureDetector(
         onTap: () {
           //设置弹窗范围外点击是否返回
-          if(!canceledOnTouchOutSide){
+          if (!canceledOnTouchOutSide) {
             return;
           }
           Navigator.pop(context);
@@ -31,7 +31,7 @@ class CustomizeDialog extends Dialog {
         child: Container(
           color: Colors.transparent,
           child: GestureDetector(
-            onTap: (){
+            onTap: () {
               //设置点击弹窗范围内点击无响应
             },
             child: new Center(
@@ -41,7 +41,7 @@ class CustomizeDialog extends Dialog {
                 height: height,
                 child: new Container(
                   decoration: ShapeDecoration(
-                    color: Color(0xffffffff),
+                    color: Colors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(
                         Radius.circular(8.0),
