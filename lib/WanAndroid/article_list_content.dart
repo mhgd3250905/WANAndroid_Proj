@@ -6,6 +6,8 @@ import 'package:douban_movies/WanAndroid/navigator_router_utils.dart';
 import 'package:douban_movies/WanAndroid/article_detail_page.dart';
 import 'article_page.dart';
 import 'config.dart';
+import 'package:douban_movies/WanAndroid/widget_banner.dart';
+
 
 class ArticleListPage extends StatefulWidget {
   String url;
@@ -61,6 +63,8 @@ class _ArticleListPageState extends State<ArticleListPage> {
     }
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -78,6 +82,38 @@ class _ArticleListPageState extends State<ArticleListPage> {
   getListView(
       List<Data> datas, ArticleType type, ScrollController scrollContriller) {
     return new ArticleListView(datas, type, scrollContriller);
+  }
+
+  FutureBuilder<HomeBean> buildBannerFutureBuilder() {
+    return new FutureBuilder<HomeBean>(
+      builder: (context, AsyncSnapshot<HomeBean> async) {
+        if (async.connectionState == ConnectionState.active ||
+            async.connectionState == ConnectionState.waiting) {
+          return new Center(
+            child: new CircularProgressIndicator(),
+          );
+        }
+
+        if (async.connectionState == ConnectionState.done) {
+          debugPrint('done');
+          if (async.hasError) {
+            return new Center(
+              child: new Text('Error:code '),
+            );
+          } else if (async.hasData) {
+            HomeBean bean = async.data;
+            widget.mDataList.addAll(bean.data.datas);
+            return RefreshIndicator(
+              key: widget._refreshIndicaterState,
+              child: getListView(
+                  widget.mDataList, widget.type, widget.scrollController),
+              onRefresh: () {},
+            );
+          }
+        }
+      },
+      future: getData(),
+    );
   }
 
   FutureBuilder<HomeBean> buildFutureBuilder() {
@@ -153,36 +189,81 @@ class ArticleListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      controller: scrollController,
-      itemCount: datas.length,
-      itemBuilder: (BuildContext context, int i) {
-        return new Container(
-          child: Column(
-            children: <Widget>[
-              InkWell(
-                child: Container(
+    return type == ArticleType.HOME_ARTICLE
+        ? ListView.builder(
+            controller: scrollController,
+            itemCount: datas.length+1,
+            itemBuilder: (BuildContext context, int i) {
+              if(i==0){
+                return Container(
                   decoration: BoxDecoration(
-                    border: Border(bottom: BorderSide(color: Colors.grey,width: 0.3)),
+                    border: Border(bottom: BorderSide(color: Colors.grey,width: 0.5)),
                   ),
-                  margin: const EdgeInsets.only(top: 10.0),
-                  child: getContentItem(i),
-                ),
-                onTap: () {
-                  NavigatorRouterUtils.pushToPage(
-                    context,
-                    ArticleDetailPage(
-                      data: datas[i],
+                  height: 200.0,
+                  child: BannerWidget(),
+                );
+              }else {
+                return new Container(
+                  child: Column(
+                    children: <Widget>[
+                      InkWell(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border(
+                                bottom:
+                                BorderSide(color: Colors.grey, width: 0.3)),
+                          ),
+                          margin: const EdgeInsets.only(top: 10.0),
+                          child: getContentItem(i),
+                        ),
+                        onTap: () {
+                          NavigatorRouterUtils.pushToPage(
+                            context,
+                            ArticleDetailPage(
+                              data: datas[i],
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                );
+              }
+            },
+            scrollDirection: Axis.vertical,
+          )
+        : ListView.builder(
+            controller: scrollController,
+            itemCount: datas.length,
+            itemBuilder: (BuildContext context, int i) {
+              return new Container(
+                child: Column(
+                  children: <Widget>[
+                    InkWell(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border(
+                              bottom:
+                                  BorderSide(color: Colors.grey, width: 0.3)),
+                        ),
+                        margin: const EdgeInsets.only(top: 10.0),
+                        child: getContentItem(i),
+                      ),
+                      onTap: () {
+                        NavigatorRouterUtils.pushToPage(
+                          context,
+                          ArticleDetailPage(
+                            data: datas[i],
+                          ),
+                        );
+                      },
                     ),
-                  );
-                },
-              ),
-            ],
-          ),
-        );
-      },
-      scrollDirection: Axis.vertical,
-    );
+                  ],
+                ),
+              );
+            },
+            scrollDirection: Axis.vertical,
+          );
   }
 
   getContentItem(int i) {
@@ -272,18 +353,30 @@ class _ArticleItemViewState extends State<ArticleItemView> {
           ),
           new Row(
             children: <Widget>[
-              Container(
-                padding: EdgeInsets.all(5.0),
-                child: Text(
-                  widget.data.chapterName,
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 13.0,
+              GestureDetector(
+                onTap: (){
+                  NavigatorRouterUtils.pushToPage(
+                    context,
+                      new ArticlePage(
+                        name: widget.data.chapterName,
+                        id: widget.data.chapterId,
+                        type: ArticleType.NORMAL_ARTICLE,
+                      ),
+                  );
+                },
+                child: Container(
+                  padding: EdgeInsets.all(5.0),
+                  child: Text(
+                    widget.data.chapterName,
+                    style: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 13.0,
+                    ),
                   ),
-                ),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(3.0),
-                  border: Border.all(color: Colors.grey, width: 0.5),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(3.0),
+                    border: Border.all(color: Colors.grey, width: 0.5),
+                  ),
                 ),
               ),
               new Expanded(

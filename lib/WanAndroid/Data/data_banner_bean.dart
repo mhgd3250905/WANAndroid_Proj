@@ -1,5 +1,7 @@
 import 'dart:convert' show json;
 
+import 'package:html_unescape/html_unescape.dart';
+
 class BannerListBean {
 
   int errorCode;
@@ -36,6 +38,11 @@ class banner {
   String imagePath;
   String title;
   String url;
+
+  getName(){
+    var unescape = new HtmlUnescape();
+    return unescape.convert(desc);
+  }
 
   banner.fromParams({this.id, this.isVisible, this.order, this.type, this.desc, this.imagePath, this.title, this.url});
 

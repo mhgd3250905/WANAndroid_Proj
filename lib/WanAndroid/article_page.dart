@@ -7,6 +7,11 @@ enum ArticleType {
   PROJECT_ARTICLE,
 }
 
+enum JumpFromType{
+  KNOWLEDGE,
+  OTHER,
+}
+
 class ArticlePage extends StatelessWidget {
   final String name;
   final int id;
