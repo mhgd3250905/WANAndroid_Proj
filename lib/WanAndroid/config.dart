@@ -16,3 +16,5 @@ final String URL_LOGIN='http://www.wanandroid.com/user/login';
 final String URL_REGISTER='http://www.wanandroid.com/user/register';
 
 final String URL_NAVI_LIST = 'http://www.wanandroid.com/navi/json';
+
+final String URL_BANNER_LIST = 'http://www.wanandroid.com/banner/json';

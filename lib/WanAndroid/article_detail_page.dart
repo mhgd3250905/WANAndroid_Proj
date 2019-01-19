@@ -9,8 +9,8 @@ class ArticleDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    return new WebviewScaffold(
+    return Container(
+      child: new WebviewScaffold(
         url: data.link,
         appBar: new AppBar(
           title:Text(data.getTitle()),
@@ -21,6 +21,7 @@ class ArticleDetailPage extends StatelessWidget {
         initialChild: new Center(
           child: new CircularProgressIndicator(),
         ),
+      ),
     );
   }
 

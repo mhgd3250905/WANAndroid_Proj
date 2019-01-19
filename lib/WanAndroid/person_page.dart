@@ -8,9 +8,11 @@ import 'package:douban_movies/WanAndroid/icon_font_utils.dart';
 import 'package:douban_movies/WanAndroid/sp_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:douban_movies/WanAndroid/config.dart';
-import 'package:cookie_jar/cookie_jar.dart';
+import 'package:rxdart/rxdart.dart';
+import 'package:rxdart/subjects.dart';
 
 String account;
+final subject = new PublishSubject<String>();
 
 class PersonPage extends StatefulWidget {
   @override
@@ -18,6 +20,21 @@ class PersonPage extends StatefulWidget {
 }
 
 class _PersonPageState extends State<PersonPage> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    subject.stream
+        .debounce(new Duration(milliseconds: 600))
+        .listen(_textChanged);
+  }
+
+  void _textChanged(String text) {
+    setState(() {
+      account = text;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     //构建菜单的方法
@@ -82,7 +99,7 @@ class AccountWidget extends StatefulWidget {
 class _AccountWidgetState extends State<AccountWidget> {
   //获取用户头像需要显示的icon标识以及用户名的Widget
   getAccountWidget(String userName, Icon icon) {
-    if (userName == null) {
+    if (userName == null||userName.length==0) {
       userName = "未登录";
     }
     return Container(
@@ -100,7 +117,9 @@ class _AccountWidgetState extends State<AccountWidget> {
                       canceledOnTouchOutSide: false,
                       width: 300.0,
                       height: 280.0,
-                      widget: DialogLogoutWidget(),
+                      widget: account == null||account.length==0
+                          ? DialogLoginWidget()
+                          : DialogLogoutWidget(),
                     );
                   });
             },
@@ -221,11 +240,7 @@ class DialogLogoutWidget extends StatelessWidget {
                   ),
                 ),
               ),
-              LogoutButton(
-                onLogout: (){
-
-                },
-              ),
+              LogoutButton(),
             ],
           ),
         ),
@@ -387,6 +402,7 @@ class _LoginButtonState extends State<LoginButton> {
                 Navigator.pop(context);
               });
               SpUtils.save(SpUtils.KEY_ACCOUNT, bean.data.username);
+              subject.add(bean.data.username);
               return getDefaultButton(
                 true,
                 Text(
@@ -468,9 +484,8 @@ class _LoginButtonState extends State<LoginButton> {
 }
 
 class LogoutButton extends StatefulWidget {
-  final onLogout;
 
-  LogoutButton({this.onLogout});
+  LogoutButton();
 
   @override
   _LogoutButtonState createState() => new _LogoutButtonState();
@@ -485,7 +500,10 @@ class _LogoutButtonState extends State<LogoutButton> {
       child: GestureDetector(
         onTap: () {
           SpUtils.remove(SpUtils.KEY_ACCOUNT);
-          Navigator.pop(context);
+          subject.add(null);
+          new Future.delayed(const Duration(seconds: 1), () {
+            Navigator.pop(context);
+          });
         },
         child: Container(
           alignment: Alignment.center,

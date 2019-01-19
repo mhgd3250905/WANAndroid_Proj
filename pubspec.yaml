@@ -26,6 +26,8 @@ dependencies:
   html_unescape: ^1.0.1+2
   sqflite: ^0.13.0+1
   shared_preferences: ^0.4.3
+  rxdart: 0.16.7
+  flutter_swiper: ^1.1.4
 
 
 dev_dependencies:
