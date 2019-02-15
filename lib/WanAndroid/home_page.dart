@@ -6,7 +6,7 @@ import 'package:douban_movies/WanAndroid/navigator_router_utils.dart';
 import 'package:douban_movies/WanAndroid/person_page.dart';
 import 'package:douban_movies/WanAndroid/popular_page.dart';
 import 'package:douban_movies/WanAndroid/project_page.dart';
-import 'package:douban_movies/WanAndroid/search_page.dart';
+import 'package:douban_movies/WanAndroid/search_page_2.dart';
 import 'package:flutter/material.dart';
 
 
@@ -59,7 +59,7 @@ class _WanAndroidHomePageState extends State<WanAndroidHomePage>
               color: Colors.white,
             ),
             onPressed: () {
-              NavigatorRouterUtils.pushToPage(context, new SearchPage());
+              showSearch(context: context, delegate: searchBarDelegate());
             },
           ),
         ],

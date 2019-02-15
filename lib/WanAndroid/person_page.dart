@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:douban_movies/WanAndroid/config.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:rxdart/subjects.dart';
+import 'dart:async';
 
 String account;
 final subject = new PublishSubject<String>();
