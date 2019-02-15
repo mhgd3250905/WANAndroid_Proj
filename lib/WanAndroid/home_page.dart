@@ -2,7 +2,6 @@ import 'package:douban_movies/WanAndroid/article_list_content.dart';
 import 'package:douban_movies/WanAndroid/article_page.dart';
 import 'package:douban_movies/WanAndroid/icon_font_utils.dart';
 import 'package:douban_movies/WanAndroid/knowledge_tree_page.dart';
-import 'package:douban_movies/WanAndroid/navigator_router_utils.dart';
 import 'package:douban_movies/WanAndroid/person_page.dart';
 import 'package:douban_movies/WanAndroid/popular_page.dart';
 import 'package:douban_movies/WanAndroid/project_page.dart';
@@ -16,6 +15,9 @@ class WanAndroidMainPage extends StatelessWidget {
     // TODO: implement build
     return MaterialApp(
       title: '玩安卓',
+      theme: new ThemeData(
+        primaryColor: Colors.white,
+      ),
       home: new WanAndroidHomePage(),
     );
   }
@@ -51,12 +53,13 @@ class _WanAndroidHomePageState extends State<WanAndroidHomePage>
     return new Scaffold(
       backgroundColor: Colors.white,
       appBar: new AppBar(
+        elevation: 0.0,
         title: new Text('玩安卓'),
         actions: <Widget>[
           IconButton(
             icon: Icon(
               Icons.search,
-              color: Colors.white,
+              color: Colors.black87,
             ),
             onPressed: () {
               showSearch(context: context, delegate: searchBarDelegate());
@@ -131,7 +134,7 @@ class _WanAndroidHomePageState extends State<WanAndroidHomePage>
         currentIndex: _selectedIndex,
         fixedColor: Colors.blue,
         onTap: onItemTap,
-        type: BottomNavigationBarType.shifting,
+        type: BottomNavigationBarType.fixed,
       ),
     );
   }

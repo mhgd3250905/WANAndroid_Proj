@@ -23,7 +23,6 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 
@@ -78,7 +77,7 @@ class searchBarDelegate extends SearchDelegate<String> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    // TODO: implement buildSuggestions
+    //如果说已经加载过一次搜索热榜，那么下次就不再重复加载了
     if (nodes.length == 0) {
       return buildDefaultFutureBuilder();
     } else {
@@ -206,8 +205,6 @@ class SearchDefaultItemView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-
     return Container(
       margin: EdgeInsets.all(10.0),
       child: Column(

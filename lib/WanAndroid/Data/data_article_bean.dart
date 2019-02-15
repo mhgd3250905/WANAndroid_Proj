@@ -109,6 +109,17 @@ class Data {
     return unescape.convert(title);
   }
 
+  getChapterName(){
+    var unescape = new HtmlUnescape();
+    return unescape.convert(chapterName);
+  }
+
+  getNiceDate(){
+    var unescape = new HtmlUnescape();
+    return unescape.convert(niceDate);
+  }
+
+
   Data.fromParams({
     this.apkLink,
     this.author,

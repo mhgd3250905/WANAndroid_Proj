@@ -358,7 +358,7 @@ class _ArticleItemViewState extends State<ArticleItemView> {
                   NavigatorRouterUtils.pushToPage(
                     context,
                       new ArticlePage(
-                        name: widget.data.chapterName,
+                        name: widget.data.getChapterName(),
                         id: widget.data.chapterId,
                         type: ArticleType.NORMAL_ARTICLE,
                       ),
@@ -367,7 +367,7 @@ class _ArticleItemViewState extends State<ArticleItemView> {
                 child: Container(
                   padding: EdgeInsets.all(5.0),
                   child: Text(
-                    widget.data.chapterName,
+                    widget.data.getChapterName(),
                     style: TextStyle(
                       color: Colors.grey,
                       fontSize: 13.0,
@@ -485,7 +485,7 @@ class _ProjectItemViewState extends State<ProjectItemView> {
                     Container(
                       padding: EdgeInsets.all(5.0),
                       child: Text(
-                        widget.data.chapterName,
+                        widget.data.getChapterName(),
                         style: TextStyle(
                           color: Colors.grey,
                           fontSize: 13.0,

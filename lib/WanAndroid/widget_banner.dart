@@ -5,21 +5,60 @@ import 'package:douban_movies/WanAndroid/Data/data_banner_bean.dart';
 import 'package:douban_movies/WanAndroid/config.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:douban_movies/WanAndroid/navigator_router_utils.dart';
-import 'package:douban_movies/WanAndroid/article_page.dart';
 import 'package:douban_movies/WanAndroid/web_page.dart';
 
 
-class BannerWidget extends StatefulWidget{
-  @override
-  _BannerWidgetState createState() =>_BannerWidgetState();
+BannerListBean bannerListBean;
 
+class BannerWidget extends StatefulWidget {
+  @override
+  _BannerWidgetState createState() => _BannerWidgetState();
 }
 
-class _BannerWidgetState extends State<BannerWidget>{
+class _BannerWidgetState extends State<BannerWidget> {
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    return buildFutureBuilder();
+    //如果banner已经加载过，那么刷新的时候轮播图就不再进行下一次刷新了
+    if (bannerListBean != null) {
+      return Swiper(
+        itemBuilder: (BuildContext context, int index) {
+          return Container(
+            padding: const EdgeInsets.only(bottom: 20.0),
+            child: Card(
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(6.0)),
+              ),
+              elevation: 4.0,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(6.0),
+                child: new FadeInImage.memoryNetwork(
+                  fit: BoxFit.fill,
+                  placeholder: kTransparentImage,
+                  image: bannerListBean.data[index].imagePath,
+                ),
+              ),
+            ),
+          );
+        },
+        itemCount: bannerListBean.data.length,
+        viewportFraction: 0.85,
+        scale: 0.95,
+        pagination: null,
+        control: null,
+        scrollDirection: Axis.horizontal,
+        autoplay: true,
+        onTap: (index) {
+          NavigatorRouterUtils.pushToPage(
+              context,
+              new WebPage(
+                title: bannerListBean.data[index].getName(),
+                url: bannerListBean.data[index].url,
+              ));
+        },
+      );
+    } else {
+      return buildFutureBuilder();
+    }
   }
 
   FutureBuilder<BannerListBean> buildFutureBuilder() {
@@ -39,30 +78,40 @@ class _BannerWidgetState extends State<BannerWidget>{
               child: new Text('Error:code '),
             );
           } else if (async.hasData) {
-            BannerListBean bean = async.data;
+            bannerListBean = async.data;
             return Swiper(
               itemBuilder: (BuildContext context, int index) {
-                return new FadeInImage.memoryNetwork(
-                  fit: BoxFit.fitWidth,
-                  placeholder: kTransparentImage,
-                  image: bean.data[index].imagePath,
+                return Container(
+                  padding: const EdgeInsets.only(bottom: 20.0),
+                  child: Card(
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(6.0)),
+                    ),
+                    elevation: 4.0,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(6.0),
+                      child: new FadeInImage.memoryNetwork(
+                        fit: BoxFit.fill,
+                        placeholder: kTransparentImage,
+                        image: bannerListBean.data[index].imagePath,
+                      ),
+                    ),
+                  ),
                 );
               },
-              itemCount: bean.data.length,
-              pagination: new SwiperPagination(
-                  builder: DotSwiperPaginationBuilder(
-                    color: Colors.black54,
-                    activeColor: Colors.white,
-                  )),
-              control: new SwiperControl(),
+              itemCount: bannerListBean.data.length,
+              viewportFraction: 0.85,
+              scale: 0.95,
+              pagination: null,
+              control: null,
               scrollDirection: Axis.horizontal,
               autoplay: true,
-              onTap: (index){
+              onTap: (index) {
                 NavigatorRouterUtils.pushToPage(
                     context,
                     new WebPage(
-                      title: bean.data[index].getName(),
-                      url: bean.data[index].url,
+                      title: bannerListBean.data[index].getName(),
+                      url: bannerListBean.data[index].url,
                     ));
               },
             );
