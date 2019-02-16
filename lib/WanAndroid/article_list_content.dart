@@ -7,6 +7,7 @@ import 'package:douban_movies/WanAndroid/article_detail_page.dart';
 import 'article_page.dart';
 import 'config.dart';
 import 'package:douban_movies/WanAndroid/widget_banner.dart';
+import 'package:douban_movies/WanAndroid/Manager/manager_article_base.dart';
 
 
 class ArticleListPage extends StatefulWidget {
@@ -297,6 +298,7 @@ class _ArticleItemViewState extends State<ArticleItemView> {
     if (isCollected) {
       isCollected = false;
     } else {
+      ArticleSaveManager.save(ArticleSaveManager.KEY_FAVORITE,widget.data);
       isCollected = true;
     }
     setState(() {});
@@ -422,6 +424,7 @@ class _ProjectItemViewState extends State<ProjectItemView> {
     if (isCollected) {
       isCollected = false;
     } else {
+      ArticleSaveManager.save(ArticleSaveManager.KEY_FAVORITE,widget.data);
       isCollected = true;
     }
     setState(() {});

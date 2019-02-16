@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class SpUtils {
   static final String KEY_ACCOUNT="key_account";
 
+
   static Future save(String key, Object value) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     if (value is String) {

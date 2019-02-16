@@ -104,21 +104,20 @@ class Data {
   int visible;
   int zan;
 
-  getTitle(){
+  getTitle() {
     var unescape = new HtmlUnescape();
     return unescape.convert(title);
   }
 
-  getChapterName(){
+  getChapterName() {
     var unescape = new HtmlUnescape();
     return unescape.convert(chapterName);
   }
 
-  getNiceDate(){
+  getNiceDate() {
     var unescape = new HtmlUnescape();
     return unescape.convert(niceDate);
   }
-
 
   Data.fromParams({
     this.apkLink,
@@ -171,6 +170,32 @@ class Data {
     visible = jsonRes['visible'];
     zan = jsonRes['zan'];
   }
+
+  Map<String, dynamic> toJson() => {
+        'apkLink': apkLink,
+        'author': author,
+        'chapterId': chapterId,
+        'chapterName': chapterName,
+        'collect': collect,
+        'courseId': courseId,
+        'desc': desc,
+        'envelopePic': envelopePic,
+        'fresh': fresh,
+        'id': mId,
+        'link': link,
+        'niceDate': niceDate,
+        'origin': origin,
+        'projectLink': projectLink,
+        'publishTime': publishTime,
+        'superChapterId': superChapterId,
+        'superChapterName': superChapterName,
+        'tags': tags,
+        'title': title,
+        'type': type,
+        'userId': userId,
+        'visible': visible,
+        'zan': zan,
+      };
 }
 
 class Tag {
