@@ -25,7 +25,7 @@ class ArticleListPage extends StatefulWidget {
   _ArticleListPageState createState() => _ArticleListPageState();
 }
 
-class _ArticleListPageState extends State<ArticleListPage> {
+class _ArticleListPageState extends State<ArticleListPage> with AutomaticKeepAliveClientMixin{
   int page = 0;
 
   @override
@@ -179,6 +179,10 @@ class _ArticleListPageState extends State<ArticleListPage> {
     HomeBean bean = HomeBean.fromJson(response.data);
     return bean;
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }
 
 class ArticleListView extends StatelessWidget {

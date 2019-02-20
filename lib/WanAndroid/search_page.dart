@@ -11,179 +11,51 @@ import 'article_page.dart';
 final String URL_HOT_KEY = 'http://www.wanandroid.com/hotkey/json';
 final String URL_SEARCH = 'http://www.wanandroid.com/article/query/0/json';
 
-class SearchPage extends StatefulWidget {
+List<KeyNode> nodes = [];
+
+
+class searchBarDelegate extends SearchDelegate<String> {
   @override
-  _SearchPageState createState() => _SearchPageState();
-}
-
-String _keyStr = "";
-
-class _SearchPageState extends State<SearchPage> {
-  final TextEditingController controller = new TextEditingController();
-  final FocusNode focusNode = new FocusNode();
-  Widget contentWidget;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    _keyStr = "";
+  List<Widget> buildActions(BuildContext context) {
+    return [
+      IconButton(
+        icon: Icon(Icons.clear),
+        onPressed: () {
+          query = "";
+          showSuggestions(context);
+        },
+      ),
+    ];
   }
 
   @override
-  Widget build(BuildContext context) {
-    debugPrint('_SearchPageState key-> ${_keyStr}');
-    if (contentWidget == null) {
-      contentWidget = SearchContentView(
-        keyStr: _keyStr,
-        callback: () => searchKey(),
+  Widget buildLeading(BuildContext context) {
+    return IconButton(
+      icon: AnimatedIcon(
+          icon: AnimatedIcons.menu_arrow, progress: transitionAnimation),
+      onPressed: () => close(context, null),
+    );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    return buildSearchFutureBuilder(query);
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    //如果说已经加载过一次搜索热榜，那么下次就不再重复加载了
+    if (nodes.length == 0) {
+      return buildDefaultFutureBuilder();
+    } else {
+      return new SearchDefaultView(
+        nodes: nodes,
+        callback: (key) {
+          query = key;
+          showResults(context);
+        },
       );
     }
-    return new Scaffold(
-      appBar: AppBar(
-        flexibleSpace: Container(
-          margin: EdgeInsets.only(left: 10.0, right: 10.0, top: 35.0),
-          alignment: Alignment.bottomLeft,
-          child: Container(
-            margin: EdgeInsets.only(bottom: 8.0),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(2.0),
-            ),
-            child: TextField(
-              focusNode: focusNode,
-              controller: controller,
-              autofocus: false,
-              cursorColor: Colors.black,
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 16.0,
-              ),
-              decoration: InputDecoration(
-                border: InputBorder.none,
-                hintText: '搜索一下吧.',
-                hintStyle: TextStyle(
-                  color: Colors.grey,
-                ),
-                prefixIcon: GestureDetector(
-                  child: Icon(
-                    Icons.arrow_back,
-                    color: Colors.blue,
-                    size: 25.0,
-                  ),
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                ),
-                suffixIcon: GestureDetector(
-                  child: Icon(
-                    Icons.search,
-                    color: Colors.blue,
-                    size: 25.0,
-                  ),
-                  onTap: () {
-                    debugPrint('search key-> ${controller.text}');
-                    _keyStr = controller.text;
-                    searchKey();
-                  },
-                ),
-              ),
-            ),
-          ),
-        ),
-        automaticallyImplyLeading: false,
-      ),
-      body: contentWidget,
-    );
-  }
-
-  void searchKey() {
-    debugPrint('$_keyStr');
-    focusNode.unfocus();
-    setState(() {
-      contentWidget = SearchContentView(
-        keyStr: _keyStr,
-        callback: () => searchKey(),
-      );
-    });
-  }
-}
-
-class SearchTextField extends StatelessWidget {
-  final GestureTapCallback onSearchTap;
-  final TextEditingController controller;
-  final FocusNode focusNode;
-
-  SearchTextField(this.controller, this.onSearchTap, this.focusNode);
-
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    return Container(
-      margin: EdgeInsets.only(top: 8.0, bottom: 8.0),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(2.0),
-      ),
-      child: TextField(
-        focusNode: focusNode,
-        controller: controller,
-        autofocus: false,
-        cursorColor: Colors.black,
-        style: TextStyle(
-          color: Colors.black,
-          fontSize: 16.0,
-        ),
-        decoration: InputDecoration(
-          border: InputBorder.none,
-          hintText: '搜索一下吧.',
-          hintStyle: TextStyle(
-            color: Colors.grey,
-          ),
-          prefixIcon: GestureDetector(
-            child: Icon(
-              Icons.arrow_back,
-              color: Colors.blue,
-              size: 30.0,
-            ),
-            onTap: () {
-              Navigator.pop(context);
-            },
-          ),
-          suffixIcon: GestureDetector(
-            child: Icon(
-              Icons.search,
-              color: Colors.blue,
-              size: 30.0,
-            ),
-            onTap: onSearchTap,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class SearchContentView extends StatefulWidget {
-  final String keyStr;
-  final callback;
-  Widget defaultContent;
-
-  SearchContentView({@required this.keyStr, this.callback});
-
-  @override
-  _SearchContentViewState createState() => _SearchContentViewState();
-}
-
-class _SearchContentViewState extends State<SearchContentView> {
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    return widget.keyStr == ""
-        ? widget.defaultContent != null
-            ? widget.defaultContent
-            : buildDefaultFutureBuilder()
-        : buildSearchFutureBuilder();
   }
 
   FutureBuilder<KeyBean> buildDefaultFutureBuilder() {
@@ -204,11 +76,14 @@ class _SearchContentViewState extends State<SearchContentView> {
             );
           } else if (async.hasData) {
             KeyBean bean = async.data;
-            widget.defaultContent = new SearchDefaultView(
-              nodes: bean.nodes,
-              callback: widget.callback,
+            nodes = bean.nodes;
+            return new SearchDefaultView(
+              nodes: nodes,
+              callback: (key) {
+                query = key;
+                showResults(context);
+              },
             );
-            return widget.defaultContent;
           }
         }
       },
@@ -224,7 +99,7 @@ class _SearchContentViewState extends State<SearchContentView> {
     return bean;
   }
 
-  FutureBuilder<HomeBean> buildSearchFutureBuilder() {
+  FutureBuilder<HomeBean> buildSearchFutureBuilder(String key) {
     return new FutureBuilder<HomeBean>(
       builder: (context, AsyncSnapshot<HomeBean> async) {
         if (async.connectionState == ConnectionState.active ||
@@ -247,12 +122,11 @@ class _SearchContentViewState extends State<SearchContentView> {
           }
         }
       },
-      future: getSearchData(),
+      future: getSearchData(key),
     );
   }
 
-  Future<HomeBean> getSearchData() async {
-    debugPrint('getHomeBeanData');
+  Future<HomeBean> getSearchData(String key) async {
     var dio = new Dio();
     Response response = await dio.post(
       URL_SEARCH,
@@ -261,7 +135,7 @@ class _SearchContentViewState extends State<SearchContentView> {
             charset: 'utf-8'),
       ),
       data: {
-        "k": widget.keyStr,
+        "k": key,
       },
     );
     HomeBean bean = HomeBean.fromJson(response.data);
@@ -297,8 +171,6 @@ class SearchDefaultItemView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-
     return Container(
       margin: EdgeInsets.all(10.0),
       child: Column(
@@ -338,8 +210,7 @@ class SearchDefaultItemView extends StatelessWidget {
                   ),
                   onTap: () {
                     debugPrint('onTap key-> ${childNode.getName()}');
-                    _keyStr = childNode.getName();
-                    callback();
+                    callback(childNode.getName());
                   },
                 );
               }).toList(),

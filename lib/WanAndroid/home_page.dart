@@ -1,23 +1,28 @@
 import 'package:douban_movies/WanAndroid/article_list_content.dart';
 import 'package:douban_movies/WanAndroid/article_page.dart';
+import 'package:douban_movies/WanAndroid/bloc/AccountBloc.dart';
+import 'package:douban_movies/WanAndroid/bloc/bloc_utils.dart';
 import 'package:douban_movies/WanAndroid/icon_font_utils.dart';
 import 'package:douban_movies/WanAndroid/knowledge_tree_page.dart';
 import 'package:douban_movies/WanAndroid/person_page.dart';
 import 'package:douban_movies/WanAndroid/popular_page.dart';
 import 'package:douban_movies/WanAndroid/project_page.dart';
-import 'package:douban_movies/WanAndroid/search_page_2.dart';
+import 'package:douban_movies/WanAndroid/search_page.dart';
 import 'package:flutter/material.dart';
 
 
 class WanAndroidMainPage extends StatelessWidget {
+
+  final ThemeData themeData;
+
+  WanAndroidMainPage({this.themeData});
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return MaterialApp(
       title: '玩安卓',
-      theme: new ThemeData(
-        primaryColor: Colors.white,
-      ),
+      theme: themeData,
       home: new WanAndroidHomePage(),
     );
   }
@@ -28,8 +33,7 @@ class WanAndroidHomePage extends StatefulWidget {
   _WanAndroidHomePageState createState() => _WanAndroidHomePageState();
 }
 
-class _WanAndroidHomePageState extends State<WanAndroidHomePage>
-    with AutomaticKeepAliveClientMixin {
+class _WanAndroidHomePageState extends State<WanAndroidHomePage> {
   final _pages = [
     ArticleListPage(
       type: ArticleType.HOME_ARTICLE,
@@ -37,7 +41,10 @@ class _WanAndroidHomePageState extends State<WanAndroidHomePage>
     PopularContentView(),
     KnowledgeTreePage(),
     ProjectTreePage(),
-    PersonPage(),
+    BlocProvider<AccountBloc>(
+      child: PersonPage(),
+      bloc: AccountBloc(),
+    ),
   ];
   final _controller = PageController(initialPage: 0);
   int _selectedIndex = 0;
@@ -139,7 +146,4 @@ class _WanAndroidHomePageState extends State<WanAndroidHomePage>
     );
   }
 
-  @override
-  // TODO: implement wantKeepAlive
-  bool get wantKeepAlive => true;
 }

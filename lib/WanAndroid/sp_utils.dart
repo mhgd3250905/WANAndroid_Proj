@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
    */
 class SpUtils {
   static final String KEY_ACCOUNT="key_account";
+  static final String KEY_PRIMARYCOLOR="key_primarycolor";
 
 
   static Future save(String key, Object value) async {
