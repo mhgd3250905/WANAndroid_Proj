@@ -272,6 +272,9 @@ class ArticleListView extends StatelessWidget {
   }
 
   getContentItem(int i) {
+    if(i>=datas.length){
+      return Container();
+    }
     if (datas[i].envelopePic == "") {
       return ArticleItemView(datas[i]);
     } else {
