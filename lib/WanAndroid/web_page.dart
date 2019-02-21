@@ -11,8 +11,12 @@ class WebPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new WebView(
-      onWebViewCreated: (WebViewController webViewController) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(title),
+      ),
+      body: new WebView(
+        onWebViewCreated: (WebViewController webViewController) {
 //          _webViewController = webViewController;
 //          _webViewController.addListener(() {
 //            int _scrollY = _webViewController.scrollY.toInt();
@@ -24,9 +28,10 @@ class WebPage extends StatelessWidget {
 //              setState(() {});
 //            }
 //          });
-      },
-      initialUrl: url,
-      javascriptMode: JavascriptMode.unrestricted,
+        },
+        initialUrl: url,
+        javascriptMode: JavascriptMode.unrestricted,
+      ),
     );
 //    return Container(
 //      child: new WebviewScaffold(
