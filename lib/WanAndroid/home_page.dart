@@ -1,3 +1,4 @@
+import 'package:douban_movies/WanAndroid/Progress/progress_manager.dart';
 import 'package:douban_movies/WanAndroid/article_list_content.dart';
 import 'package:douban_movies/WanAndroid/article_page.dart';
 import 'package:douban_movies/WanAndroid/bloc/AccountBloc.dart';
@@ -35,9 +36,10 @@ class WanAndroidHomePage extends StatefulWidget {
 
 class _WanAndroidHomePageState extends State<WanAndroidHomePage> {
   final _pages = [
-    ArticleListPage(
-      type: ArticleType.HOME_ARTICLE,
-    ),
+//    ArticleListPage(
+//      type: ArticleType.HOME_ARTICLE,
+//    ),
+    ProgressManager(),
     PopularContentView(),
     KnowledgeTreePage(),
     ProjectTreePage(),
