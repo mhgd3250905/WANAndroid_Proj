@@ -1,10 +1,10 @@
+import 'package:douban_movies/WanAndroid/Progress/painter_factory.dart';
 import 'package:flutter/material.dart';
-import 'package:douban_movies/WanAndroid/Progress/painter.dart';
 
 class ProgressManager extends StatefulWidget {
   @override
   _ProgressManagerState createState() =>
-      new _ProgressManagerState().._factory = PainterFactory();
+      new _ProgressManagerState().._factory = WavePainterFactory();
 }
 
 class _ProgressManagerState extends State<ProgressManager>
@@ -15,9 +15,9 @@ class _ProgressManagerState extends State<ProgressManager>
   Animation<double> yAnimation;
   List<double> _progressList = [];
   double curProgress = 0;
-  PainterFactory _factory;
+  BasePainterFactory _factory;
 
-  set painter(PainterFactory factory) {
+  set painter(BasePainterFactory factory) {
     _factory = factory;
   }
 
@@ -50,7 +50,7 @@ class _ProgressManagerState extends State<ProgressManager>
     super.initState();
     xController = new AnimationController(
         vsync: this, duration: Duration(milliseconds: 1000));
-    xAnimation = new Tween(begin: 0.0, end: 1.0).animate(xController);
+    xAnimation = new Tween(begin: 0.0, end: 0.0).animate(xController);
     xAnimation.addListener(_change);
     yController = new AnimationController(
         vsync: this, duration: Duration(milliseconds: 500));
@@ -60,25 +60,29 @@ class _ProgressManagerState extends State<ProgressManager>
 
     doDelay(xController, 0);
 
-    Future.delayed(Duration(milliseconds: 100), () {
+    Future.delayed(Duration(milliseconds: 1000), () {
       setProgress(0.8);
     });
-    Future.delayed(Duration(milliseconds: 200), () {
+    Future.delayed(Duration(milliseconds: 2000), () {
       setProgress(0.2);
     });
-    Future.delayed(Duration(milliseconds: 300), () {
-      setProgress(0.8);
+    Future.delayed(Duration(milliseconds: 3000), () {
+      setProgress(1.0);
+    });
+    Future.delayed(Duration(milliseconds: 4000), () {
+      setProgress(0.5);
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Container(
+      child:
+      Container(
         width: 200.0,
         height: 200.0,
         child: new CustomPaint(
-          painter: _factory.getWavePainter()
+          painter: _factory.getPainter()
             ..XAnimation = xAnimation
             ..YAnimation = yAnimation,
           size: new Size(200.0, 200.0),
@@ -117,6 +121,5 @@ class _ProgressManagerState extends State<ProgressManager>
     yAnimation.removeListener(_onProgressChange);
     yAnimation.removeStatusListener(_onProgressStatusChange);
     super.dispose();
-
   }
 }
