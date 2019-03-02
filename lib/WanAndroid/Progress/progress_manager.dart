@@ -50,7 +50,7 @@ class _ProgressManagerState extends State<ProgressManager>
     super.initState();
     xController = new AnimationController(
         vsync: this, duration: Duration(milliseconds: 1000));
-    xAnimation = new Tween(begin: 0.0, end: 0.0).animate(xController);
+    xAnimation = new Tween(begin: 0.0, end: 1.0).animate(xController);
     xAnimation.addListener(_change);
     yController = new AnimationController(
         vsync: this, duration: Duration(milliseconds: 500));
