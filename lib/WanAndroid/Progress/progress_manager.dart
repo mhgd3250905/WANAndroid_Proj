@@ -49,9 +49,18 @@ class _ProgressManagerState extends State<ProgressManager>
     // TODO: implement initState
     super.initState();
     xController = new AnimationController(
-        vsync: this, duration: Duration(milliseconds: 1000));
+        vsync: this, duration: Duration(milliseconds: 3000));
     xAnimation = new Tween(begin: 0.0, end: 1.0).animate(xController);
+
     xAnimation.addListener(_change);
+//    xAnimation.addStatusListener((status) {
+//      if (status == AnimationStatus.completed) {
+//        xController.reverse();
+//      } else if (status == AnimationStatus.dismissed) {
+//        xController.forward();
+//      }
+//    });
+
     yController = new AnimationController(
         vsync: this, duration: Duration(milliseconds: 500));
     yAnimation = new Tween(begin: 0.0, end: 1.0).animate(yController);
@@ -77,8 +86,7 @@ class _ProgressManagerState extends State<ProgressManager>
   @override
   Widget build(BuildContext context) {
     return Center(
-      child:
-      Container(
+      child: Container(
         width: 200.0,
         height: 200.0,
         child: new CustomPaint(

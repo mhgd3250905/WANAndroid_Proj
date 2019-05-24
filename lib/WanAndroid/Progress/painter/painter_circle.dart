@@ -22,7 +22,8 @@ class CirclePainter extends BasePainter {
     double width = size.width;
     double height = size.height;
     double radius = min(width, height) / 2 - circleWidth - circleGap;
-    double degree = 2 * pi * YAnimation.value;
+    double scale = YAnimation.value;
+    double degree = 2 * pi * scale;
     Offset center = new Offset(width / 2, height / 2);
 
     var circlePaint = new Paint()
@@ -36,6 +37,15 @@ class CirclePainter extends BasePainter {
       ..color = progressColor
       ..style = PaintingStyle.fill
       ..strokeWidth = circleWidth;
+
+    if (scale == 1) {
+      canvas.saveLayer(
+          Rect.fromCircle(center: center, radius: min(width, height) / 2),
+          progressPaint);
+      canvas.drawCircle(center, radius, progressPaint);
+      canvas.restore();
+      return;
+    }
 
     List<Path> wavePaths = [];
 

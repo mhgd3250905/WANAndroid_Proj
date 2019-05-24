@@ -1,4 +1,5 @@
 import 'package:douban_movies/WanAndroid/Progress/progress_manager.dart';
+import 'package:douban_movies/WanAndroid/Progress/widget_rain_drop.dart';
 import 'package:douban_movies/WanAndroid/article_list_content.dart';
 import 'package:douban_movies/WanAndroid/article_page.dart';
 import 'package:douban_movies/WanAndroid/bloc/AccountBloc.dart';
@@ -39,7 +40,8 @@ class _WanAndroidHomePageState extends State<WanAndroidHomePage> {
 //    ArticleListPage(
 //      type: ArticleType.HOME_ARTICLE,
 //    ),
-    ProgressManager(),
+//    ProgressManager(),
+    RainDropWidget(),
     PopularContentView(),
     KnowledgeTreePage(),
     ProjectTreePage(),
