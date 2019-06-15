@@ -37,11 +37,11 @@ class WanAndroidHomePage extends StatefulWidget {
 
 class _WanAndroidHomePageState extends State<WanAndroidHomePage> {
   final _pages = [
-//    ArticleListPage(
-//      type: ArticleType.HOME_ARTICLE,
-//    ),
+    ArticleListPage(
+      type: ArticleType.HOME_ARTICLE,
+    ),
 //    ProgressManager(),
-    RainDropWidget(),
+//    RainDropWidget(),
     PopularContentView(),
     KnowledgeTreePage(),
     ProjectTreePage(),

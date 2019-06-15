@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 /**
@@ -10,14 +12,24 @@ class RainDropPoint {
   Offset offset;
   final double MAX_RADIUS = 30.0;
   double radius = 0.0;
+  Paint _paint;
+  Color _color;
 
-  RainDropPoint({this.offset});
+  RainDropPoint({this.offset}) {
+    Random random = new Random();
+    _color = Color.fromARGB(
+        255, random.nextInt(255), random.nextInt(255), random.nextInt(255));
+    _paint = new Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.0
+      ..strokeCap = StrokeCap.round;
+  }
 
   //绘制
-  void drawPonit(Canvas canvas, Paint paint) {
+  void drawPonit(Canvas canvas) {
     int alpha = (255 * (MAX_RADIUS - radius) / MAX_RADIUS).toInt();
-    paint.color = Color.fromARGB(alpha, 255, 255, 255);
-    canvas.drawCircle(offset, radius, paint);
+    _paint.color = Color.fromARGB(alpha, _color.red, _color.green, _color.blue);
+    canvas.drawCircle(offset, radius, _paint);
     radius += 0.5;
   }
 

@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 
 class RainDropPainter extends CustomPainter {
   List<RainDropPoint> rainList = List();
-  Paint _paint = new Paint()
-    ..style = PaintingStyle.stroke
-    ..strokeWidth = 1.0
-    ..strokeCap = StrokeCap.round;
+//  Paint _paint = new Paint()
+//    ..style = PaintingStyle.stroke
+//    ..strokeWidth = 1.0
+//    ..strokeCap = StrokeCap.round;
 
   RainDropPainter({@required this.rainList});
 
@@ -16,7 +16,7 @@ class RainDropPainter extends CustomPainter {
     double height = size.height;
 
     var bgPainter = new Paint()
-      ..color = Colors.lightBlue
+      ..color = Colors.black87
       ..style = PaintingStyle.fill;
 
     //绘制背景
@@ -25,7 +25,7 @@ class RainDropPainter extends CustomPainter {
         bgPainter);
 
     rainList.forEach((rain) {
-      rain.drawPonit(canvas, _paint);
+      rain.drawPonit(canvas);
     });
 
     rainList.removeWhere((rain) {
